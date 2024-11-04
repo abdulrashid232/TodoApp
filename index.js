@@ -1,105 +1,42 @@
-let form=document.querySelector("form");
-let text=document.getElementById("text");
-let todoCon=document.querySelector(".todo-con")
-form.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    addtodo();
-})
-let todos=JSON.parse(localStorage.getItem("todos"));
-if(todos){
-    todos.forEach(element => {
-        addtodo(element)
-    });
-}
-function addtodo(elem) {
-    let todoColl=document.createElement("div");
-    todoColl.classList.add("todocoll")
-    let todotext=text.value;
-    if(elem){
-        todotext=elem.text;
+
+const inputText = document.getElementById("text");
+const addBtn = document.querySelector(".plusButton");
+const todoContainer = document.querySelector(".todo-container");
+
+function addTodo() {
+    let todoList = document.createElement("div");
+    // todoList.classList.add("todocoll");
+    let todoText = inputText.value;
+    if (todoText) {
+        todoList.innerHTML = `
+        <div class="todo-li">
+        <div class="check"><img src="./images/icon-check.svg" alt=""></div>
+        <p class="ptag">${todoText}</p>
+        <button class="close"><img src="./images/icon-cross.svg" alt=""></button>
+      </div>
+      <div class="hr"></div>`;
+        todoContainer.appendChild(todoList);
     }
-    if(todotext){
-    todoColl.innerHTML=`
-    <div class="todo-li">
-    <div class="check ${elem && elem.complete?"active-check":""}"><img src="./images/icon-check.svg" alt=""></div>
-    <p class="ptag ${elem && elem.complete?"complete":""}">${todotext}</p>
-    <button class="close"><img src="./images/icon-cross.svg" alt=""></button>
-  </div>
-  <div class="hr"></div>`;
-    todoCon.appendChild(todoColl);
-    updateLs()
-    }
-    let close=todoColl.querySelector(".close");
-    close.addEventListener("click", ()=>{
-        todoColl.remove();
-        updateLs();
+   
+    let check = todoList.querySelector(".check");
+    check.addEventListener('click', () => {
+        check.classList.add("active-check")
+        todoList.children[0].children[1].classList.add("complete")
     })
-    let check=todoColl.querySelector(".check");
-    check.addEventListener('click', ()=>{
-        check.classList.toggle("active-check")
-        todoColl.children[0].children[1].classList.add("complete")  
-        updateLs()
-    })
-    text.value="";
+    let close = todoList.querySelector(".close");
+    close.addEventListener("click", deleteTodo);
+
+    inputText.value = "";
 }
 
-function updateLs() {
-    let ptag=document.querySelectorAll(".ptag")
-    let arr=[];
-    ptag.forEach(element => {
-        arr.push({
-            text:element.innerText,
-            complete:element.classList.contains("complete")
-        })
-    });
-    localStorage.setItem("todos",JSON.stringify(arr));
-}
-let info=document.querySelectorAll(".choice p")
-let todoli=document.querySelectorAll(".todocoll")
-console.log(info);
-info.forEach(element => {
-   element.addEventListener("click", ()=>{
-    info.forEach(item => {
-        item.classList.remove("active");
-    });
-    element.classList.add("active")
-    if(element.innerText=="Active"){
-        todoli.forEach(elem => {
-            if(!elem.children[0].children[1].classList.contains("complete")){
-                elem.style.display="block";
-            }else{
-                elem.style.display="none";
-            }
-        });
-    }else if(element.innerText=="Completed"){
-        todoli.forEach(elem => {
-            if(elem.children[0].children[1].classList.contains("complete")){
-                elem.style.display="block";
-            }else{
-                elem.style.display="none";
-            }
-        });
+addBtn.addEventListener("click", addTodo);
+
+deleteTodo = (e) => {
+    // console.log(e.target.parentNode.previousSibling.previousSibling)
+    if (e.target.parentElement.previousSibling.previousSibling.classList.contains("complete")){
+        e.target.parentElement.parentElement.remove();
     }else{
-        todoli.forEach(elem => {
-            elem.style.display="block";
-        });
+        alert("You can only delete completed tasks")
     }
-   })
-});
-let clear=document.querySelector(".clear");
-clear.addEventListener("click", ()=>{
-    todoli.forEach(elem => {
-        if(elem.children[0].children[1].classList.contains("complete")){
-            elem.remove()
-            updateLs();
-        }
-    });
-})
-let left=document.querySelector(".left");
-function setitem() {
-    let activeTodo=document.querySelectorAll(".todo-li .active-check");
-    let diff=todoli.length-activeTodo.length;
-    left.innerText=`${diff} items left`
     
 }
-setitem();

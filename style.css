@@ -9,7 +9,7 @@ body{
     background-color: hsl(235, 21%, 11%);
     font-family: system-ui;
 }
-.banner-con{
+.banner-container{
     width: 100%;
     height: 60vh;
 }
@@ -45,12 +45,15 @@ body{
 form{
     width: 100%;
     height: 83px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 form input{
     width: 100%;
     padding: 15px 30px;
     border-radius: 5px;
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
     background: hsl(235, 24%, 19%);
     font-size: 16px;
     color: #fff;
@@ -67,7 +70,7 @@ input::placeholder{
     max-height: 330px;
     margin-top: 2rem
 }
-.todo-con{
+.todo-containertainer{
     width: 100%;
     background-color: hsl(235, 24%, 19%);
     border-radius: 5px;
@@ -149,3 +152,65 @@ input::placeholder{
     text-decoration: line-through;
     opacity: 0.5;
 }
+
+.plusButton {
+    /* Config start */
+    --plus_sideLength: 2.5rem;
+    --plus_topRightTriangleSideLength: 0.9rem;
+    /* Config end */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid white;
+    width: var(--plus_sideLength);
+    height: var(--plus_sideLength);
+    background-color: #000000;
+    overflow: hidden;
+    margin-left: 5px;
+  }
+  
+  .plusButton::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-width: 0 var(--plus_topRightTriangleSideLength) var(--plus_topRightTriangleSideLength) 0;
+    border-style: solid;
+    border-color: transparent white transparent transparent;
+    transition-timing-function: ease-in-out;
+    transition-duration: 0.2s;
+  }
+  
+  .plusButton:hover {
+    cursor: pointer;
+  }
+  
+  .plusButton:hover::before {
+    --plus_topRightTriangleSideLength: calc(var(--plus_sideLength) * 2);
+  }
+  
+  .plusButton:focus-visible::before {
+    --plus_topRightTriangleSideLength: calc(var(--plus_sideLength) * 2);
+  }
+  
+  .plusButton>.plusIcon {
+    fill: white;
+    width: calc(var(--plus_sideLength) * 0.7);
+    height: calc(var(--plus_sideLength) * 0.7);
+    z-index: 1;
+    transition-timing-function: ease-in-out;
+    transition-duration: 0.2s;
+  }
+  
+  .plusButton:hover>.plusIcon {
+    fill: black;
+    transform: rotate(180deg);
+  }
+  
+  .plusButton:focus-visible>.plusIcon {
+    fill: black;
+    transform: rotate(180deg);
+  }
